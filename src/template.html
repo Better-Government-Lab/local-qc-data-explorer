@@ -1,4 +1,19 @@
 <!doctype html>
+<!--
+  Local QC Data Explorer
+  Source code: https://github.com/Better-Government-Lab/local-qc-data-explorer
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+  in compliance with the License. You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software distributed under the License
+  is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+  or implied. See the License for the specific language governing permissions and limitations
+  under the License. The full License text is at the bottom of this page.
+
+  This file includes Plotly.js and Papa Parse, each under the MIT license. Their copyright and
+  license notices appear with their code below.
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -59,6 +74,9 @@
   #caption { font-size: 13px; color: var(--muted); margin-top: 6px; }
   footer { font-size: 13px; color: var(--muted); line-height: 1.5; padding-top: 18px; padding-bottom: 30px; border-top: 1px solid var(--line); margin-top: 24px; }
   a { color: #0b5cad; }
+  .license { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+  .license summary { cursor: pointer; color: #0b5cad; margin-top: 6px; }
+  .license pre { font-size: 12px; line-height: 1.4; white-space: pre-wrap; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; max-height: 420px; overflow: auto; color: var(--ink); }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } #chart { height: 560px; } }
 </style>
 </head>
@@ -121,6 +139,17 @@
   <a href="https://docs.google.com/spreadsheets/d/1zLF0h30Ic2Y9cv4sRDV3UTuInR-QgeN9RWrvRA0bT3k/edit?usp=sharing" target="_blank" rel="noopener">this reference sheet</a>.<br>
   Developed by: Zhaowen Guo, Xiao Xu,
   <a href="https://www.bettergovernmentlab.org/resources/snap-quality-control-error-viewer" target="_blank" rel="noopener">Better Government Lab</a>, Georgetown University
+  <div class="license">
+    <strong>License.</strong> This tool is free to use, copy, modify and share, including inside a government agency or
+    for commercial purposes, under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache License, Version 2.0</a>.
+    It is provided as is, without warranty. The
+    <a href="https://github.com/Better-Government-Lab/local-qc-data-explorer" target="_blank" rel="noopener">source code</a> is public.
+    It includes Plotly.js and Papa Parse, each under the MIT license.
+    <details>
+      <summary>Read the full license text</summary>
+      <pre><!--LICENSE_TEXT--></pre>
+    </details>
+  </div>
 </footer>
 <!--SCRIPTS-->
 </body>

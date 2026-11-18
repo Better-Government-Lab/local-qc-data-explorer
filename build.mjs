@@ -25,6 +25,7 @@ const feedback = process.env.FEEDBACK_URL
 const html = read("src/template.html")
   .replace("<!--LOGO-->", () => logo)
   .replace("<!--FEEDBACK-->", () => feedback)
+  .replace("<!--LICENSE_TEXT-->", () => read("LICENSE").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").trim())
   .replace("<!--SCRIPTS-->", () => scripts);
 mkdirSync(new URL("docs/", import.meta.url), { recursive: true });
 writeFileSync(new URL("docs/index.html", import.meta.url), html);
