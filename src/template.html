@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Enforced by the browser: this page cannot connect to any server, load remote scripts,
+     or submit forms. A data file you choose is read on your computer and cannot be sent anywhere. -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Local QC Data Explorer</title>
+<style>
+  :root { --ink: #1f2328; --muted: #5b6470; --line: #d5d9de; --panel: #f5f6f7; --accent: #b4531f; }
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; color: var(--ink); margin: 0; background: #fff; }
+  header, main, footer { max-width: 1500px; margin: 0 auto; padding: 0 20px; }
+  header { padding-top: 16px; }
+  header img { height: 44px; display: block; margin-bottom: 10px; }
+  h1 { font-size: 26px; margin: 0 0 6px; line-height: 1.2; }
+  .intro { font-size: 14px; color: var(--muted); line-height: 1.45; margin: 0 0 10px; max-width: 1200px; }
+  .preview { font-size: 13px; background: #fff6e5; border: 1px solid #edd9ac; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; }
+  .tabs { border-bottom: 1px solid var(--line); margin-bottom: 14px; display: flex; gap: 4px; }
+  .tabs span { font-size: 14px; padding: 8px 14px; border: 1px solid var(--line); border-bottom: none; border-radius: 6px 6px 0 0; background: var(--panel); font-weight: bold; }
+  .tabs span.later { background: #fff; color: #9aa1a9; font-weight: normal; border-color: #eceef0; }
+  .layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 22px; align-items: start; }
+  .side { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px; font-size: 14px; }
+  .field { margin-bottom: 14px; }
+  .field > label, .field > .lab { display: block; font-weight: bold; margin-bottom: 5px; }
+  .help { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 50%; background: #c9ced4; color: #fff; font-size: 11px; font-weight: bold; cursor: help; margin-left: 4px; }
+  select, input[type=number] { width: 100%; padding: 7px 8px; font-size: 14px; border: 1px solid #b9bfc6; border-radius: 5px; background: #fff; font-family: inherit; }
+  .radios label, .check label { font-weight: normal; margin-right: 14px; cursor: pointer; }
+  .check label { display: flex; gap: 8px; align-items: flex-start; margin: 0; }
+  .data { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 10px; margin-bottom: 16px; }
+  .data .name { font-weight: bold; }
+  .data .note { color: var(--muted); font-size: 12.5px; margin: 4px 0 8px; line-height: 1.35; }
+  .btn { display: inline-block; font-size: 13px; padding: 6px 10px; border: 1px solid #9aa1a9; border-radius: 5px; background: #fff; cursor: pointer; font-family: inherit; color: var(--ink); }
+  .btn:hover { background: #eef0f2; }
+  .btn:focus-visible, select:focus-visible, input:focus-visible, .ms-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .error { color: #a4161a; font-size: 13px; margin-top: 6px; }
+  /* multi-select */
+  .ms { position: relative; }
+  .ms-button { width: 100%; text-align: left; padding: 7px 28px 7px 8px; font-size: 14px; border: 1px solid #b9bfc6; border-radius: 5px; background: #fff; cursor: pointer; font-family: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
+  .ms-button::after { content: "\25BE"; position: absolute; right: 9px; top: 6px; color: var(--muted); }
+  .ms-panel { display: none; position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 3px); background: #fff; border: 1px solid #9aa1a9; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.16); padding: 8px; }
+  .ms.open .ms-panel { display: block; }
+  .ms.wide .ms-panel { width: 460px; max-width: calc(100vw - 60px); right: auto; }
+  .ms-tools { display: flex; gap: 6px; margin-bottom: 6px; }
+  .ms-tools input { flex: 1; padding: 5px 7px; font-size: 13px; border: 1px solid #b9bfc6; border-radius: 4px; min-width: 0; }
+  .ms-list { max-height: 320px; overflow: auto; font-size: 13px; }
+  .ms-group { font-weight: bold; margin: 8px 0 3px; cursor: pointer; color: #333; }
+  .ms-group:first-child { margin-top: 0; }
+  .ms-item { display: flex; gap: 7px; align-items: flex-start; padding: 2px 2px 2px 8px; cursor: pointer; line-height: 1.3; }
+  .ms-item:hover { background: #f0f2f4; }
+  /* chart */
+  .heads { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; line-height: 1.3; margin-bottom: 8px; }
+  .heads div:nth-child(2) { text-align: center; }
+  .heads div:last-child { text-align: right; }
+  #chart { height: 700px; }
+  #message { display: none; padding: 60px 20px; text-align: center; color: var(--muted); font-size: 15px; border: 1px dashed var(--line); border-radius: 8px; }
+  #caption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  footer { font-size: 13px; color: var(--muted); line-height: 1.5; padding-top: 18px; padding-bottom: 30px; border-top: 1px solid var(--line); margin-top: 24px; }
+  a { color: #0b5cad; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } #chart { height: 560px; } }
+</style>
+</head>
+<body>
+<header>
+  <img alt="Better Government Lab" src="<!--LOGO-->">
+  <h1>Local QC Data Explorer</h1>
+  <p class="intro">This application visualizes Quality Control (QC) errors in Supplemental Nutrition Assistance Program (SNAP)
+  cases, based on a nationally representative sample reviewed by state and federal auditors. This tool uses SNAP Quality
+  Control (QC) data, which is based on a sample of reviewed cases rather than the full population of SNAP participants.
+  Differences across states may reflect variation in policy implementation and reporting practices, and should not be
+  interpreted as direct comparisons of program performance. The data exclude cases found to be ineligible, which tend to
+  represent larger errors. Users should interpret results with appropriate caution.</p>
+  <p class="preview"><strong>Preview.</strong> This is a browser-only version of the SNAP Quality Control Error Viewer. It runs entirely on your
+  computer: the page makes no network connections, and a data file you load is never uploaded. Only the Error Pathways
+  view is built so far.<!--FEEDBACK--></p>
+  <div class="tabs"><span>Error Pathways</span><span class="later">Error Demographics</span><span class="later">Error Severity</span><span class="later">Pivot Table</span><span class="later">Base Rates</span></div>
+</header>
+<main>
+  <div class="layout">
+    <div class="side">
+      <div class="data">
+        <div class="lab" style="font-weight:bold;margin-bottom:4px">Data</div>
+        <div class="name" id="dataName"></div>
+        <div class="note" id="dataNote"></div>
+        <label class="btn" for="file">Use your own file&hellip;</label>
+        <input type="file" id="file" accept=".csv,text/csv" style="position:absolute;left:-9999px">
+        <button class="btn" id="useNational" type="button" style="display:none">Back to national data</button>
+        <div class="error" id="fileError" role="alert"></div>
+      </div>
+
+      <div class="field"><span class="lab">Select Year(s):<span class="help" title="If multiple years are selected, the displayed plot will be based on aggregated data.">?</span></span><div id="years"></div></div>
+      <div class="field"><label for="combination">Select Error Pathway to Visualize:<span class="help" title="Error element refers to what went wrong, error nature refers to how it happened, and error type refers to why it happened.">?</span></label><select id="combination"></select></div>
+      <div class="field radios"><span class="lab">Flow by:<span class="help" title="Choose what the link width represents: number of case-errors or total dollars in error. Dollars are the total error amount of each case, attributed to its first-listed error.">?</span></span>
+        <label><input type="radio" name="mode" value="count" checked> Occurrences</label>
+        <label><input type="radio" name="mode" value="dollars"> Dollar amount</label></div>
+      <div class="field" id="fElement"><span class="lab">Select Element:</span><div id="elements"></div></div>
+      <div class="field" id="fNature"><span class="lab">Select Nature:</span><div id="natures"></div></div>
+      <div class="field" id="fType"><span class="lab">Select Type:</span><div id="types"></div></div>
+      <div class="field"><label for="state">Select State:</label><select id="state"></select></div>
+      <div class="field"><label for="minValue"><span id="minLabel"></span><span class="help" title="Hide small flows. This applies to the selected metric (occurrences or dollars).">?</span></label><input type="number" id="minValue" min="0" step="1"></div>
+      <div class="field"><label for="status">Filter by Error Status:<span class="help" title="Error status refers to whether the error led to an under- or overissuance.">?</span></label>
+        <select id="status"><option>All</option><option>Underissuance</option><option>Overissuance</option></select></div>
+      <div class="field check"><label><input type="checkbox" id="over" checked> <span>Only include cases above yearly error-rate threshold</span></label></div>
+    </div>
+    <div>
+      <div class="heads" id="heads"></div>
+      <div id="chart"></div>
+      <div id="message" role="status"></div>
+      <div id="caption"></div>
+    </div>
+  </div>
+</main>
+<footer>
+  Data Source: <a href="https://www.fns.usda.gov/snap/qc/database" target="_blank" rel="noopener">SNAP Quality Control Data</a>.
+  For the sankey diagram, nodes are ordered in descending frequency. A case is counted as an error when its total error
+  amount is over the year's federal threshold. Dollar amounts are the case's total error amount, attributed to its
+  first-listed error. For illustrative examples of how error element, nature, and type can come together to form a
+  possible error scenario, refer to
+  <a href="https://docs.google.com/spreadsheets/d/1zLF0h30Ic2Y9cv4sRDV3UTuInR-QgeN9RWrvRA0bT3k/edit?usp=sharing" target="_blank" rel="noopener">this reference sheet</a>.<br>
+  Developed by: Zhaowen Guo, Xiao Xu,
+  <a href="https://www.bettergovernmentlab.org/resources/snap-quality-control-error-viewer" target="_blank" rel="noopener">Better Government Lab</a>, Georgetown University
+</footer>
+<!--SCRIPTS-->
+</body>
+</html>
