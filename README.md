@@ -75,3 +75,8 @@ Rscript tools/build_inputs.R <path to snap-qc-shiny> <folder with the .sav files
 ## Data source
 
 USDA Food and Nutrition Service, [SNAP Quality Control Data](https://www.fns.usda.gov/snap/qc/database).
+
+## License
+
+Apache License 2.0; see `LICENSE`. The bundled libraries keep their own licenses: Plotly.js (MIT) and
+Papa Parse (MIT).
