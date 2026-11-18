@@ -9,7 +9,7 @@
   Unless required by applicable law or agreed to in writing, software distributed under the License
   is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
   or implied. See the License for the specific language governing permissions and limitations
-  under the License. The full License text is at the bottom of this page.
+  under the License.
 
   This file includes Plotly.js and Papa Parse, each under the MIT license. Their copyright and
   license notices appear with their code below.
@@ -29,7 +29,7 @@
   body { font-family: Arial, Helvetica, sans-serif; color: var(--ink); margin: 0; background: #fff; }
   header, main, footer { max-width: 1500px; margin: 0 auto; padding: 0 20px; }
   header { padding-top: 16px; }
-  header img { height: 44px; display: block; margin-bottom: 10px; }
+  header img { width: min(943px, 100%); height: auto; display: block; margin-bottom: 12px; }
   h1 { font-size: 26px; margin: 0 0 6px; line-height: 1.2; }
   .intro { font-size: 14px; color: var(--muted); line-height: 1.45; margin: 0 0 10px; max-width: 1200px; }
   .preview { font-size: 13px; background: #fff6e5; border: 1px solid #edd9ac; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; }
@@ -75,8 +75,7 @@
   footer { font-size: 13px; color: var(--muted); line-height: 1.5; padding-top: 18px; padding-bottom: 30px; border-top: 1px solid var(--line); margin-top: 24px; }
   a { color: #0b5cad; }
   .license { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
-  .license summary { cursor: pointer; color: #0b5cad; margin-top: 6px; }
-  .license pre { font-size: 12px; line-height: 1.4; white-space: pre-wrap; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; max-height: 420px; overflow: auto; color: var(--ink); }
+  .sample { font-size: 12.5px; color: var(--muted); margin-top: 8px; line-height: 1.35; }
   @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } #chart { height: 560px; } }
 </style>
 </head>
@@ -106,6 +105,9 @@
         <input type="file" id="file" accept=".csv,text/csv" style="position:absolute;left:-9999px">
         <button class="btn" id="useNational" type="button" style="display:none">Back to national data</button>
         <div class="error" id="fileError" role="alert"></div>
+        <div class="sample">No file at hand? Download a
+          <a href="https://better-government-lab.github.io/local-qc-data-explorer/sample/california_fy2017-2019_fy2022-2024.csv" download>sample file</a>
+          (California, FY2017&ndash;2019 and FY2022&ndash;2024, public data), then load it with the button above.</div>
       </div>
 
       <div class="field"><span class="lab">Select Year(s):<span class="help" title="If multiple years are selected, the displayed plot will be based on aggregated data.">?</span></span><div id="years"></div></div>
@@ -144,11 +146,8 @@
     for commercial purposes, under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache License, Version 2.0</a>.
     It is provided as is, without warranty. The
     <a href="https://github.com/Better-Government-Lab/local-qc-data-explorer" target="_blank" rel="noopener">source code</a> is public.
-    It includes Plotly.js and Papa Parse, each under the MIT license.
-    <details>
-      <summary>Read the full license text</summary>
-      <pre><!--LICENSE_TEXT--></pre>
-    </details>
+    It includes Plotly.js and Papa Parse, each under the MIT license
+    (<a href="https://github.com/Better-Government-Lab/local-qc-data-explorer/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener">notices</a>).
   </div>
 </footer>
 <!--SCRIPTS-->

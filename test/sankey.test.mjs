@@ -52,6 +52,19 @@ test("a public-layout CSV gives the same variances as the bundled data (Michigan
   assert.equal(dollars24, 20922);
 });
 
+test("the downloadable California sample loads and matches the bundled data for the same years", () => {
+  const parsed = Papa.parse(readFileSync(new URL("docs/sample/california_fy2017-2019_fy2022-2024.csv", root), "utf8"), { header: true, skipEmptyLines: true });
+  for (const c of ["STATE", "STATUS", "AMTERR", "YRMONTH", "ELEMENT1", "NATURE1", "AGENCY1"]) assert.ok(parsed.meta.fields.includes(c), `sample is missing ${c}`);
+  const fromCsv = variancesFromCaseRows(parsed.data);
+  assert.equal(fromCsv.unknownYear, 0);
+  const sampleYears = new Set([2017, 2018, 2019, 2022, 2023, 2024]);
+  assert.deepEqual([...new Set(fromCsv.variances.map((v) => v.year))].sort(), [...sampleYears].sort());
+  assert.deepEqual([...new Set(fromCsv.variances.map((v) => v.state))], ["California"]);
+  const key = (v) => JSON.stringify([v.year, v.element, v.nature, v.type, v.status, v.dollars, v.overThreshold]);
+  const want = national.filter((v) => v.state === "California" && sampleYears.has(v.year)).map(key).sort();
+  assert.deepEqual(fromCsv.variances.map(key).sort(), want);
+});
+
 test("every label in the data appears in a filter group, and no label is shared between columns", () => {
   for (const [dim, table] of [["element", LABELS.elements], ["nature", LABELS.natures], ["type", LABELS.causes]]) {
     for (const g of GROUPS[dim]) assert.ok(Array.isArray(g.items), `${dim} group ${g.group}: items must be an array`);

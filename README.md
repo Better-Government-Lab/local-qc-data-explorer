@@ -28,6 +28,10 @@ present: `ELEMENT2`-`9`, `NATURE2`-`9`, `AGENCY2`-`9`. All other columns are ign
 Thresholds are defined for FY2017-FY2024. Cases from other years load, but are treated as under
 the threshold.
 
+A sample file is at `docs/sample/california_fy2017-2019_fy2022-2024.csv` and is linked from the
+page: California's public QC cases for FY2017-2019 and FY2022-2024 (5,150 cases), with only the
+columns the viewer reads.
+
 ## How it differs from the Shiny app's Error Pathways tab
 
 - The "hide small flows" value starts at 0 when one state is selected or a local file is loaded.
@@ -52,6 +56,7 @@ test/                Node tests that compare the JavaScript against those fixtur
 vendor/              Plotly.js 2.35.2 (strict build), Papa Parse 5.4.1, logo
 build.mjs            builds docs/index.html
 docs/index.html      the built page (served by GitHub Pages)
+docs/sample/         generated: the downloadable California sample file
 ```
 
 ## Build and test
@@ -60,11 +65,11 @@ Requires Node 20 or later.
 
 ```
 npm install          # Papa Parse, for the tests only
-npm test             # 8 tests
+npm test             # 9 tests
 npm run build        # writes docs/index.html
 ```
 
-To regenerate the labels, filter groups, national data and fixtures, you need R with `dplyr`,
+To regenerate the labels, filter groups, national data, sample file and fixtures, you need R with `dplyr`,
 `tidyr`, `haven` and `jsonlite`, a checkout of `snap-qc-shiny`, and the public
 `qc_pub_fy<year>.sav` files:
 
@@ -78,5 +83,5 @@ USDA Food and Nutrition Service, [SNAP Quality Control Data](https://www.fns.usd
 
 ## License
 
-Apache License 2.0; see `LICENSE`. The bundled libraries keep their own licenses: Plotly.js (MIT) and
-Papa Parse (MIT).
+Apache License 2.0; see `LICENSE`. The built page includes Plotly.js and Papa Parse, each under the
+MIT license; their license texts are in `THIRD_PARTY_NOTICES.md`.
