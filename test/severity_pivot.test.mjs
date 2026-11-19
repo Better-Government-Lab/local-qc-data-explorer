@@ -1,7 +1,6 @@
 // The Error Severity and Pivot Table logic must reproduce what the Shiny app's logic produces from
 // its own data files (fixtures/severity_expected.json and fixtures/pivot_expected.json, written by
-// tools/build_inputs.R), with one stated difference: a case is identified by year and case id, where
-// the Shiny app uses the case id alone.
+// tools/build_inputs.R). A case is identified by year and case id together.
 // Run from the repo root:  node --test
 import { test } from "node:test";
 import assert from "node:assert/strict";

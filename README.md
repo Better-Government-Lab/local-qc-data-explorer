@@ -37,13 +37,11 @@ columns the viewer reads.
 
 ## How it differs from the Shiny app
 
-**Case counts across years (Error Severity and Pivot Table).** In the Shiny app's data files a
-case id is the case's row number within its year's file, so the same id recurs in every year. The
-Shiny app counts distinct case ids without the year. With more than one year selected, cases from
-different years that share an id are counted as one. For all years and all states, over the
-threshold, the Shiny pivot table's grand total is 23,096 cases; the actual number is 31,518. This
-tool identifies a case by a number that is unique across years. With a single year selected the
-two tools give the same numbers.
+**Case counts.** Both tools identify a case by year and case id together, and give the same case
+counts. (In the Shiny app's data files a case id is the case's row number within its year's file,
+so the same id recurs in every year. Until 2026-11-18 the Shiny app counted distinct ids without
+the year, and its multi-year counts ran low: for all years and all states, over the threshold,
+its pivot table showed 23,096 cases where the actual number is 31,518.)
 
 **Error Pathways**
 
@@ -104,7 +102,7 @@ npm run build        # writes docs/index.html
 ```
 
 The fixtures for Error Severity and Pivot Table are computed in R with the Shiny app's steps on
-the Shiny app's data files, except that a case is identified by year and case id together.
+the Shiny app's data files, with a case identified by year and case id together.
 
 To regenerate the labels, filter groups, national data, sample file and fixtures, you need R with `dplyr`,
 `tidyr`, `haven` and `jsonlite`, a checkout of `snap-qc-shiny`, and the public

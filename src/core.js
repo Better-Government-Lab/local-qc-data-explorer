@@ -5,9 +5,8 @@
 //   - a case is an error when AMTERR is over the review year's threshold
 //   - the dollar amount is AMTERR, carried on the case's first-listed variance
 //   - every recorded variance (ELEMENT1-9) is kept and labeled
-// One difference from the Shiny app: a case is identified here by a number that is unique across
-// years. The Shiny app's case ids repeat in every year, so its case counts run low when more than
-// one year is selected.
+// A case is identified by a number that is unique across years. (In the Shiny app's data files a
+// case id repeats in every year; the Shiny app pairs it with the year.)
 import { LABELS } from "./labels.js";
 
 const num = (v) => {

@@ -145,9 +145,8 @@ write_json(lapply(settings, sankey_r), "fixtures/sankey_expected.json", auto_unb
 
 # ---------------------------------------------------------------- Error Severity and Pivot Table fixtures
 # Both tabs count cases. In the app's data files a case id is the case's row number within its year's
-# file, so the same id recurs in every year. The Shiny app counts distinct case ids without the year,
-# which undercounts cases when more than one year is selected. Here, and in the JavaScript, a case is
-# identified by year and case id together. With a single year selected the two give the same numbers.
+# file, so the same id recurs in every year. Here, in the JavaScript, and in the Shiny app (which
+# builds a year-and-id key when it loads the files), a case is identified by year and case id together.
 resp_of <- setNames(ca$responsibility, ca$label)
 app_env <- new.env()
 for (e in exprs) if (is.call(e) && identical(e[[1]], as.name("<-")) && identical(e[[2]], as.name("type_to_responsibility"))) eval(e, app_env)
